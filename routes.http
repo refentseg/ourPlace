@@ -1,0 +1,14 @@
+### CREATE Place
+POST http://localhost:5000/api/places 
+content-type: application/json
+
+{ 
+    "creator":"u2",
+    "title":"Hello there",
+    "description":"testing123",
+    "address": "Soccer City Ave, Nasrec, Johannesburg, 2147",
+    "coordinates":{
+        "lat":-26.2347569,
+        "lng":27.9804667
+    }
+}
