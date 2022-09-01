@@ -1,4 +1,5 @@
-const uuid = require('uuid/v4')
+const uuid = require('uuid');
+const { validationResult } = require('express-validator')
 
 const HttpError= require('../models/http-error')
 
@@ -16,10 +17,15 @@ const getAllUsers =(req,res,next)=>{
 }
 
 const signup=(req,res,next)=>{
+  const errors = validationResult(res);
+  if(errors.isEmpty){
+    throw new HttpError("Invalid inputs please try again",422)
+  }
   const {userName,email,password} =req.body
-  const hasUser = DUMMY_Users.find(u=>u.email==email);
+  const hasUserE = DUMMY_Users.find(u=>u.email==email);
+  const hasUserNa = DUMMY_Users.find(u=>u.userName==userName);
   
-   if(hasUser){
+   if(hasUserE && hasUserNa){
     throw new HttpError('Email already exsits',401)
    }
   const createdUser ={
@@ -32,6 +38,7 @@ const signup=(req,res,next)=>{
   DUMMY_Users.push(createdUser);
   res.stayus(201).json({user:createdUser})
 }
+//Login doesnt need a vaildator because it already checks
 
 const login=(req,res,next)=>{
   const {email,password} = req.body

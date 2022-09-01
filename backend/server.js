@@ -1,6 +1,16 @@
 //third party libires
 const express = require('express');
 const bodyParser = require('body-parser');
+require('dotenv').config();
+const mongoose =require('mongoose');
+
+const connectUrl =process.env.MOGO_URI;
+ 
+const connectConfig = { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true 
+}
+
 const placesRoutes = require('./routes/places');
 
 const usersRoutes = require('./routes/users');
@@ -11,10 +21,19 @@ const app = express();
 
 app.use(bodyParser.json());
 
+const allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', '*');
+    res.header('Access-Control-Allow-Headers', '*');
+    next();
+}
+
+app.use(allowCrossDomain);
+
 app.use('/api/places',placesRoutes); //=>/api/places/....
 app.use('/api/users',usersRoutes);
 
-app.use((req,rs,next)=>{
+app.use((req,res,next)=>{
   const error = new HttpError('Could not find this route',404);
   throw error;
 })
@@ -29,5 +48,11 @@ app.use((error,req,res,next)=>{
 })
 
 
-
+mongoose.connect(connectUrl,connectConfig)
+.then(()=>{
+  console.log("Mongoose is running")
 app.listen(5000);
+})
+.catch(err =>{
+  console.log(err);
+});
