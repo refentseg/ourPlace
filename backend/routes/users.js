@@ -10,10 +10,10 @@ router.get('/',usersContollers.getUsers);
 router.post('/signup',[
     check('email').not().normalizeEmail().isEmail(),
     check('password').isLength({max: 8}),
-    check('usernmae').not().isEmpty()
+    check('name').not().isEmpty()
 ],usersContollers.signup)
 
-router.post('login',[
+router.post('/login',[
 ],usersContollers.login)
 
 module.exports = router
