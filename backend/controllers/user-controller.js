@@ -18,7 +18,6 @@ let users;
     );
     return next(error);
   }
-  console.log(users);
   res.json({users: users.map(user => user.toObject({ getters: true }))});
   
 }
@@ -48,7 +47,7 @@ const signup= async (req,res,next)=>{
   name,
   email,
   password,
-  image:'https://i.pinimg.com/originals/0f/ca/a1/0fcaa1dcca650f50648826da8300e46d.jpg',
+  image:'https://www.dmarge.com/wp-content/uploads/2021/01/dwayne-the-rock--480x320.jpg',
   places:[]
   });
 
@@ -84,7 +83,7 @@ const login=async(req,res,next)=>{
   }
 
 
-  res.json({message:"Logged In"})
+  res.json({message:"Logged In",user:existingUser.toObject({getters:true})})
 }
 
 exports.getUsers=getAllUsers

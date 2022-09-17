@@ -1,8 +1,9 @@
 const express = require('express');
 const { check } = require('express-validator')
-const router = require("express").Router();
 
 const placesContollers = require('../controllers/places-controller')
+
+const router = express.Router();
 
 
 router.get('/:pid',placesContollers.getPlaceByID )
@@ -24,8 +25,6 @@ router.patch('/:pid',[
 ],placesContollers.UpdatePlace);
 
 router.delete('/:pid',placesContollers.DeletePlace);
-
-
 
 
 module.exports = router;

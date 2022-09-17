@@ -32,24 +32,26 @@ const getPlaceByID = async (req,res,next)=>{
 
 //getting Places by user Id
 const getPlacesByUserIdPlaces = async (req,res,next)=>{
-    const userID = req.params.uid;
-    let places;
-    try{
-       places = await Place.find({creator:userID}); //Mongoose find method
-    }
-    catch(err){
-        const error = new HttpError(
-            'Could not find places.',500);
-        return next(error)   
-    }
+    const userId = req.params.uid;
+    let userWithPlaces;
+     try {
+    userWithPlaces = await User.findById(userId).populate('places');
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching places failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
 
-    if(!places|| places.length===0){
-        return next(
-            new HttpError('Could not find a user places for the provided Id',404)
-        );
-        
-    }
-    res.json({place:places.map(place => place.toObject({getters:true}))})
+  // if (!places || places.length === 0) {
+  if (!userWithPlaces || userWithPlaces.places.length === 0) {
+    return next(
+      new HttpError('Could not find places for the provided user id.', 404)
+    );
+  }
+
+  res.json({ places: userWithPlaces.places.map(place => place.toObject({ getters: true })) });
 };
 
 //Create Place
@@ -86,7 +88,7 @@ try{
  
 }catch(err){
 const error = new HttpError(
-        'Creating place failed User , place try again.',500);
+        'Creating place failed, place try again.',500);
     return next(error)
 }
 
