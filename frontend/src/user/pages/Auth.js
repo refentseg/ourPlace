@@ -13,6 +13,7 @@ import LoadingSpinner from '../../shared/components/UIELEMENTS/LoadingSpinner';
 
 import ErrorModal from '../../shared/components/UIELEMENTS/ErrorModal'
 import { useHttpClient } from '../../shared/hooks/http-hook';
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 
 const Auth = () => {
 
@@ -39,7 +40,8 @@ const Auth = () => {
    if(!isLoginMode){
     setFormData({
       ...formState.inputs,
-       name:undefined
+       name:undefined,
+       image:undefined
     },
       formState.inputs.email.isValid && formState.inputs.password.isValid
     );
@@ -48,6 +50,10 @@ const Auth = () => {
       ...formState.inputs,
       name:{
         value:'',
+        isValid:false
+      },
+      image:{
+        value:null,
         isValid:false
       }
     },false
@@ -58,6 +64,7 @@ const Auth = () => {
 
   const authSubmitHandler = async event => {
     event.preventDefault();
+    console.log(formState.inputs);
 
     if(isLoginMode){
       try{
@@ -105,6 +112,9 @@ const Auth = () => {
       <h2>Login Required</h2>
       <hr />
       <form onSubmit={authSubmitHandler}>
+        {!isLoginMode &&
+        <ImageUpload center id="image" onInput={inputHandler}/>
+        }
         {!isLoginMode &&
         <Input
           element="input"
